@@ -1,4 +1,3 @@
-from PIL import Image
 import pygame
 import sys
 
@@ -23,6 +22,12 @@ while True:
             quit()
         elif event.type == pygame.MOUSEWHEEL:
             threshold += data_mean / 20 * event.y
+        elif event.type == pygame.KEYUP:
+            if event.key == 45:
+                threshold += 200
+            elif event.key == 61:
+                threshold -= 200
+
     for x, y, val in data:
         pygame.draw.rect(screen, (max(0, min(255, int(val / threshold * 255))),) * 3, (x, y, 1, 1))
     pygame.display.flip()
