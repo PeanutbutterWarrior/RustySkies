@@ -1,7 +1,7 @@
 use std::collections::HashMap;
 use rand::prelude::*;
 
-const POINTS_DENSITY: i64 = 10;
+const POINTS_DENSITY: i64 = 1;
 const CELL_SIZE: i64 = 50;
 
 #[derive(Copy, Clone)]
@@ -46,8 +46,8 @@ impl WorleyNoiseGen {
             None => {
                 let mut new_points_vec: Vec<Point> = Vec::new();
                 for _ in 0..POINTS_DENSITY {
-                    let new_x = self.rand_generator.next_u64() as i64 % CELL_SIZE + cell_position.0 * CELL_SIZE;
-                    let new_y = self.rand_generator.next_u64() as i64 % CELL_SIZE + cell_position.1 * CELL_SIZE;
+                    let new_x = (self.rand_generator.next_u64() as i64 % CELL_SIZE).abs() + cell_position.0 * CELL_SIZE;
+                    let new_y = (self.rand_generator.next_u64() as i64 % CELL_SIZE).abs() + cell_position.1 * CELL_SIZE;
                     new_points_vec.push(Point(new_x, new_y));
                 }
                 self.points.insert(cell_position, new_points_vec);
