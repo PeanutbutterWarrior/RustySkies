@@ -1,4 +1,5 @@
 from PIL import Image
+import pygame
 import sys
 
 with open(sys.argv[1]) as file:
@@ -9,13 +10,19 @@ height = max(i[1] for i in data) - min(i[1] for i in data)
 
 data_size = max(i[2] for i in data)
 data_mean = sum(i[2] for i in data) / len(data)
+threshold = data_mean * 2
 
-image = Image.new('L', (width + 1, height + 1))
 
-print(width, height)
+pygame.init()
+screen = pygame.display.set_mode((width, height))
 
-for x, y, val in data:
-    image.putpixel((x, y), min(255, int(val * (127.5 / data_mean))))
-
-image.save('output/out.png')
-
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            quit()
+        elif event.type == pygame.MOUSEWHEEL:
+            threshold += data_mean / 20 * event.y
+    for x, y, val in data:
+        pygame.draw.rect(screen, (max(0, min(255, int(val / threshold * 255))),) * 3, (x, y, 1, 1))
+    pygame.display.flip()
